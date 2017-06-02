@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -63,7 +64,8 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation, menu);
         return true;
     }
 
@@ -109,7 +111,6 @@ public class NavigationActivity extends AppCompatActivity
             Intent intent = new Intent(NavigationActivity.this, ListActivity.class);
             startActivity(intent);
         }  else if (id == R.id.nav_manage) {
-
 
         } else if (id == R.id.nav_share) {
 
