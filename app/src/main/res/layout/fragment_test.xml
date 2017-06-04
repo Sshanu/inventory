@@ -11,9 +11,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Test"
-            android:id="@+id/testview"
+            android:id="@+id/testButton"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />/>
     </RelativeLayout>
 
 </FrameLayout>
