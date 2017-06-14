@@ -69,23 +69,6 @@ public class ListActivity extends AppCompatActivity {
         adapter.swapCursor(dbHelper.readStock());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_dummy_data:
-                // add dummy data for testing
-                addDummyData();
-                adapter.swapCursor(dbHelper.readStock());
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Add data for demo purposes
      */
