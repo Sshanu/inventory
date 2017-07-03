@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name"
+            android:label="Inventory Manager"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,6 +47,9 @@
         <activity android:name=".ListActivity" />
         <activity android:name=".SelectImageActivity" />
         <activity android:name=".NavigationActivity" />
+        <activity android:name=".TestActivity"/>
+        <activity android:name=".SignupActivity"/>
+        <activity android:name=".BillingActivity"></activity>
     </application>
 
 </manifest>

@@ -18,10 +18,15 @@ import android.view.MenuItem;
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     protected DrawerLayout drawer;
+    SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        session = new SessionManager(getApplicationContext());
+
+        session.checkLogin();
 
         TrainFragment fragment = new TrainFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction =
@@ -91,31 +96,31 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_train) {
-            TrainFragment fragment = new TrainFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
 
-            fragmentTransaction.commit();
-            // Handle the camera action
+            Intent intent = new Intent(NavigationActivity.this, DetailsActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_test) {
-            TestFragment fragment = new TestFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
 
-            fragmentTransaction.commit();
-
+            Intent intent = new Intent(NavigationActivity.this, BillingActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_list) {
+
             Intent intent = new Intent(NavigationActivity.this, ListActivity.class);
             startActivity(intent);
+
         }  else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_logout) {
+            session.logoutUser();
+            Intent intent = new Intent(NavigationActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

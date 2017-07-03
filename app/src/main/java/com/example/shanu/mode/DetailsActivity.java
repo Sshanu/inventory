@@ -36,8 +36,8 @@ public class DetailsActivity extends AppCompatActivity {
     EditText nameEdit;
     EditText priceEdit;
     EditText quantityEdit;
-    EditText supplierNameEdit;
-    EditText supplierPhoneEdit;
+    EditText manufacturingEdit;
+    EditText expiryEdit;
     EditText supplierEmailEdit;
     long currentItemId;
     ImageButton decreaseQuantity;
@@ -60,9 +60,8 @@ public class DetailsActivity extends AppCompatActivity {
         nameEdit = (EditText) findViewById(R.id.product_name_edit);
         priceEdit = (EditText) findViewById(R.id.price_edit);
         quantityEdit = (EditText) findViewById(R.id.quantity_edit);
-        supplierNameEdit = (EditText) findViewById(R.id.supplier_name_edit);
-        supplierPhoneEdit = (EditText) findViewById(R.id.supplier_phone_edit);
-        supplierEmailEdit = (EditText) findViewById(R.id.supplier_email_edit);
+        manufacturingEdit = (EditText) findViewById(R.id.manufaturing_edit);
+        expiryEdit = (EditText) findViewById(R.id.expiry_edit);
         decreaseQuantity = (ImageButton) findViewById(R.id.decrease_quantity);
         increaseQuantity = (ImageButton) findViewById(R.id.increase_quantity);
         imageBtn = (Button) findViewById(R.id.select_image);
@@ -235,10 +234,10 @@ public class DetailsActivity extends AppCompatActivity {
         if (!checkIfValueSet(quantityEdit, "quantity")) {
             isAllOk = false;
         }
-        if (!checkIfValueSet(supplierNameEdit, "supplier name")) {
+        if (!checkIfValueSet(manufacturingEdit, "supplier name")) {
             isAllOk = false;
         }
-        if (!checkIfValueSet(supplierPhoneEdit, "supplier phone")) {
+        if (!checkIfValueSet(expiryEdit, "supplier phone")) {
             isAllOk = false;
         }
         if (!checkIfValueSet(supplierEmailEdit, "supplier email")) {
@@ -257,8 +256,8 @@ public class DetailsActivity extends AppCompatActivity {
                     nameEdit.getText().toString().trim(),
                     priceEdit.getText().toString().trim(),
                     Integer.parseInt(quantityEdit.getText().toString().trim()),
-                    supplierNameEdit.getText().toString().trim(),
-                    supplierPhoneEdit.getText().toString().trim(),
+                    manufacturingEdit.getText().toString().trim(),
+                    expiryEdit.getText().toString().trim(),
                     supplierEmailEdit.getText().toString().trim(),
                     actualUri.toString());
             dbHelper.insertItem(item);
@@ -285,14 +284,14 @@ public class DetailsActivity extends AppCompatActivity {
         nameEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_NAME)));
         priceEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_PRICE)));
         quantityEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_QUANTITY)));
-        supplierNameEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_SUPPLIER_NAME)));
-        supplierPhoneEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_SUPPLIER_PHONE)));
+        manufacturingEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_SUPPLIER_NAME)));
+        expiryEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_SUPPLIER_PHONE)));
         supplierEmailEdit.setText(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_SUPPLIER_EMAIL)));
         imageView.setImageURI(Uri.parse(cursor.getString(cursor.getColumnIndex(StockContract.StockEntry.COLUMN_IMAGE))));
         nameEdit.setEnabled(false);
         priceEdit.setEnabled(false);
-        supplierNameEdit.setEnabled(false);
-        supplierPhoneEdit.setEnabled(false);
+        manufacturingEdit.setEnabled(false);
+        expiryEdit.setEnabled(false);
         supplierEmailEdit.setEnabled(false);
         imageBtn.setEnabled(false);
     }
@@ -304,7 +303,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // intent to phone
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + supplierPhoneEdit.getText().toString().trim()));
+                intent.setData(Uri.parse("tel:" + expiryEdit.getText().toString().trim()));
                 startActivity(intent);
             }
         });

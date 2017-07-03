@@ -47,6 +47,8 @@ public class SignupActivity extends AppCompatActivity {
     private String shopName;
     private String shopAddress;
 
+    SessionManager session;
+
     private boolean EMAIL_NOT_ENTERED = false;
 
     @Override
@@ -54,6 +56,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        session = new SessionManager(getApplicationContext());
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -181,6 +184,7 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             Log.e("response is :",result.toString());
 
+            session.createLoginSession(phone);
             Intent intent = new Intent(SignupActivity.this, NavigationActivity.class);
             startActivity(intent);
             finish();
