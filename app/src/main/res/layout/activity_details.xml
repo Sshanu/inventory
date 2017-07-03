@@ -80,65 +80,76 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/supplier_name_title"
+            android:id="@+id/manufaturing_title"
             style="@style/details_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/supplier_name_title" />
+            android:text="Manufacturing Date" />
 
         <EditText
-            android:id="@+id/supplier_name_edit"
+            android:id="@+id/manufaturing_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/supplier_name_hint"
+            android:hint="01/01/2000"
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/supplier_phone_title"
+            android:id="@+id/expiry_title"
             style="@style/details_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/supplier_phone_title" />
+            android:text="Expiry Date" />
 
         <EditText
-            android:id="@+id/supplier_phone_edit"
+            android:id="@+id/expiry_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/supplier_phone_hint"
-            android:inputType="phone" />
-
-        <TextView
-            android:id="@+id/supplier_email_title"
-            style="@style/details_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/supplier_email_title" />
-
-        <EditText
-            android:id="@+id/supplier_email_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_email_address"
-            android:inputType="textEmailAddress" />
+            android:hint="01/01/2020"
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/image_title"
             style="@style/details_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/image" />
+            android:text="Select Upto 5 Images" />
 
         <Button
             android:id="@+id/select_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/select_image" />
-
-        <ImageView
-            android:id="@+id/image_view"
+            android:text="@string/select_images" />
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="100dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/image_view1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
+            <ImageView
+                android:id="@+id/image_view2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
+            <ImageView
+                android:id="@+id/image_view3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
+            <ImageView
+                android:id="@+id/image_view4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
+            <ImageView
+                android:id="@+id/image_view5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"/>
 
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

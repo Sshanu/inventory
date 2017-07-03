@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,15 +13,20 @@ import android.support.v7.widget.Toolbar;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import android.net.ConnectivityManager;
@@ -50,12 +53,25 @@ public class LoginActivity extends AppCompatActivity {
 
     private String phone;
     private String password;
+
+    SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        CookieManager cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cmrCookieMan);
+        session = new SessionManager(getApplicationContext());
+        if(session.isLoggedIn()) {
+            Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        session = new SessionManager(getApplicationContext());
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -75,16 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 phone = phoneText.getText().toString();
                 password = passwordText.getText().toString();
                 new SendPostRequest().execute();
-//                if((email.getText().toString().equals("raamish")) && (password.getText().toString().equals("raamish")))
-//                {
-//                    Toast.makeText(getBaseContext(), "Login successful", Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-//                    startActivity(intent);
-//                }
-//                else
-//                {
-//                    Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-//                }
+
             }
 
         });
@@ -98,8 +105,8 @@ public class LoginActivity extends AppCompatActivity {
         protected String doInBackground(String... arg0) {
 
             try {
-
-                URL url = new URL(" https://7a10d223.ngrok.io/signin"); // here is your URL path
+                String COOKIES_HEADER = "Set-Cookie";
+                URL url = new URL(" http://3bbee033.ngrok.io/signin"); // here is your URL path
 
                 JSONObject postDataParams = new JSONObject();
                 postDataParams.put("inputPhone", phone);
@@ -123,6 +130,20 @@ public class LoginActivity extends AppCompatActivity {
                 os.close();
 
                 int responseCode=conn.getResponseCode();
+
+                java.net.CookieManager msCookieManager = new java.net.CookieManager();
+
+                Map<String, List<String>> headerFields = conn.getHeaderFields();
+                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+
+                if (cookiesHeader != null) {
+                    for (String cookie : cookiesHeader) {
+                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
+                    }
+                }
+                Log.e("Cookies - ",msCookieManager.getCookieStore().getCookies().toString());
+//                Toast.makeText(getApplicationContext(), msCookieManager.getCookieStore().getCookies().toString(),
+//                        Toast.LENGTH_LONG).show();
 
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
 
@@ -155,14 +176,20 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext(), result,
-                    Toast.LENGTH_LONG).show();
-            Log.e("response is :",result.toString());
-
-            Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-            startActivity(intent);
-            finish();
-
+            Log.e("response is :",result);
+            if(result.contains("success")) {
+                Toast.makeText(getApplicationContext(), "Login Successful",
+                        Toast.LENGTH_LONG).show();
+                session.createLoginSession(phone);
+                Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Some Error Occurred, Try Again",
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 
