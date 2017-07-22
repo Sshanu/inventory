@@ -2,6 +2,7 @@ package com.example.shanu.mode;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.webkit.ValueCallback;
 
 import java.net.CookieStore;
 import java.net.HttpCookie;
@@ -128,7 +129,7 @@ class MyCookieStore implements CookieStore {
     }
 
     /*
-     * @see java.net.CookieStore#removeAll()
+     * @see java.net.CookieStore#removeSessionCookies()
      */
     public boolean removeAll() {
 
