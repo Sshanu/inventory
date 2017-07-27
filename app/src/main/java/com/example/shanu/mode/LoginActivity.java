@@ -53,20 +53,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private String phone;
     private String password;
-
+    private CookieManager cmrCookieMan;
     SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        CookieManager cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cmrCookieMan);
-        session = new SessionManager(getApplicationContext());
         if(session.isLoggedIn()) {
             Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
             startActivity(intent);
             finish();
         }
+        cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cmrCookieMan);
+        cmrCookieMan.getCookieStore().removeAll();
+        session = new SessionManager(getApplicationContext());
 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -91,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 phone = phoneText.getText().toString();
                 password = passwordText.getText().toString();
                 new SendPostRequest().execute();
+                Log.e("Custom Cookies Before-",cmrCookieMan.getCookieStore().getCookies().toString());
 
             }
 
@@ -131,17 +133,18 @@ public class LoginActivity extends AppCompatActivity {
 
                 int responseCode=conn.getResponseCode();
 
-                java.net.CookieManager msCookieManager = new java.net.CookieManager();
-
-                Map<String, List<String>> headerFields = conn.getHeaderFields();
-                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
-
-                if (cookiesHeader != null) {
-                    for (String cookie : cookiesHeader) {
-                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-                    }
-                }
-                Log.e("Cookies - ",msCookieManager.getCookieStore().getCookies().toString());
+//                java.net.CookieManager msCookieManager = new java.net.CookieManager();
+//
+//                Map<String, List<String>> headerFields = conn.getHeaderFields();
+//                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+//
+//                if (cookiesHeader != null) {
+//                    for (String cookie : cookiesHeader) {
+//                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
+//                    }
+//                }
+//                Log.e("Cookies - ",msCookieManager.getCookieStore().getCookies().toString());
+                Log.e("Custom Cookies After - ",cmrCookieMan.getCookieStore().getCookies().toString());
 //                Toast.makeText(getApplicationContext(), msCookieManager.getCookieStore().getCookies().toString(),
 //                        Toast.LENGTH_LONG).show();
 

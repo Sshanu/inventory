@@ -33,10 +33,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.example.shanu.mode.SelectImageActivity;
 
@@ -48,9 +51,6 @@ import javax.net.ssl.HttpsURLConnection;
 import static android.R.attr.fragment;
 import static java.lang.Boolean.FALSE;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class TestActivity extends AppCompatActivity {
 
     private static final int REQUEST_SELECT_IMAGE = 0;
@@ -62,8 +62,6 @@ public class TestActivity extends AppCompatActivity {
     // The image selected to detect.
     private Bitmap mBitmap;
 
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
     private ProgressBar mProgressBar;
     private String encodedImage;
     private Button mTestButton;
@@ -171,6 +169,20 @@ public class TestActivity extends AppCompatActivity {
                 os.close();
 
                 int responseCode=conn.getResponseCode();
+
+                java.net.CookieManager msCookieManager = new java.net.CookieManager();
+
+                Map<String, List<String>> headerFields = conn.getHeaderFields();
+                List<String> cookiesHeader = headerFields.get("Set-Cookie");
+
+                if (cookiesHeader != null) {
+                    for (String cookie : cookiesHeader) {
+                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
+                    }
+                }
+                Log.e("Cookies in TestAct - ",msCookieManager.getCookieStore().getCookies().toString());
+
+
 
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
 

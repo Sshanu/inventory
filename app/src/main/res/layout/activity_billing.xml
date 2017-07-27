@@ -16,7 +16,6 @@
             android:layout_alignParentTop="true"
             android:layout_width="0dp"
             android:text="Item Name"
-            android:background="grey"
             android:textAlignment="center"
             android:layout_height="wrap_content"
             android:layout_weight="0.33"/>
@@ -69,7 +68,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:background="grey"
             android:gravity="right"
             android:text="Total"
             android:textAlignment="center"
@@ -81,7 +79,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:background="grey"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold" />
