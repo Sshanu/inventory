@@ -54,12 +54,13 @@ public class LoginActivity extends AppCompatActivity {
     private String phone;
     private String password;
     private CookieManager cmrCookieMan;
-    SessionManager session;
+    SessionManager session ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if(session.isLoggedIn()) {
+        session = new SessionManager(getApplicationContext());
+        if( session.isLoggedIn()) {
             Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
             startActivity(intent);
             finish();
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cmrCookieMan);
         cmrCookieMan.getCookieStore().removeAll();
-        session = new SessionManager(getApplicationContext());
+
 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -91,8 +92,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 phone = phoneText.getText().toString();
                 password = passwordText.getText().toString();
-                new SendPostRequest().execute();
                 Log.e("Custom Cookies Before-",cmrCookieMan.getCookieStore().getCookies().toString());
+                new SendPostRequest().execute();
+
 
             }
 

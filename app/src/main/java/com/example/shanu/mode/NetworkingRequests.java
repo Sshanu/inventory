@@ -13,7 +13,7 @@ public class NetworkingRequests extends Application{
 
     public static HttpURLConnection connection;
 
-    public HttpURLConnection getConnection (){
+    public static synchronized HttpURLConnection getConnection (){
         return  connection;
     }
 }
