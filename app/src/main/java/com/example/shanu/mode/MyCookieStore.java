@@ -30,7 +30,7 @@ class MyCookieStore implements CookieStore {
     /*
      * The memory storage of the cookies
      */
-    private Map<URI, List<HttpCookie>> mapCookies = new HashMap<URI, List<HttpCookie>>();
+    private static Map<URI, List<HttpCookie>> mapCookies = new HashMap<URI, List<HttpCookie>>();
     /*
      * The instance of the shared preferences
      */

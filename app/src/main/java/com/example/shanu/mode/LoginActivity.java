@@ -1,6 +1,7 @@
 package com.example.shanu.mode;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,13 +35,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.app.Activity;
+
+
+import com.example.shanu.mode.data.MyCookieStore2;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -53,7 +50,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private String phone;
     private String password;
-    private CookieManager cmrCookieMan;
+//    private CookieManager cmrCookieMan;
+
+    public SharedPreferences sessionPref;
+    public SharedPreferences.Editor prefEditor;
+    public final String SESSION_PREF_NAME = "MyCookieStore";
+    public final String SESSION_PREF_SESSIONID = "session";
+    public String COOKIES_HEADER = "Set-Cookie";
+
     SessionManager session ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +66,32 @@ public class LoginActivity extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
         if( session.isLoggedIn()) {
             Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+
+            /*
+            cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
+            CookieHandler.setDefault(cmrCookieMan);
+            cmrCookieMan = new CookieManager(new MyCookieStore2(this), CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+            CookieHandler.setDefault(cmrCookieMan);
+            */
+            CookieManager cookieManager = new CookieManager();
+            CookieHandler.setDefault(cookieManager);
             startActivity(intent);
             finish();
         }
+        /*
         cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cmrCookieMan);
         cmrCookieMan.getCookieStore().removeAll();
-
-
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        cmrCookieMan = new CookieManager(new MyCookieStore2(this), CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+        CookieHandler.setDefault(cmrCookieMan);
+        cmrCookieMan.getCookieStore().removeAll();
+        */
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
 
         session = new SessionManager(getApplicationContext());
 
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -92,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 phone = phoneText.getText().toString();
                 password = passwordText.getText().toString();
-                Log.e("Custom Cookies Before-",cmrCookieMan.getCookieStore().getCookies().toString());
+//                Log.e("Custom Cookies Before-",cmrCookieMan.getCookieStore().getCookies().toString());
                 new SendPostRequest().execute();
 
 
@@ -109,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
         protected String doInBackground(String... arg0) {
 
             try {
-                String COOKIES_HEADER = "Set-Cookie";
+
                 URL url = new URL(" http://3bbee033.ngrok.io/signin"); // here is your URL path
 
                 JSONObject postDataParams = new JSONObject();
@@ -135,18 +152,28 @@ public class LoginActivity extends AppCompatActivity {
 
                 int responseCode=conn.getResponseCode();
 
-//                java.net.CookieManager msCookieManager = new java.net.CookieManager();
-//
-//                Map<String, List<String>> headerFields = conn.getHeaderFields();
-//                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
-//
+                sessionPref = getSharedPreferences(SESSION_PREF_NAME, MODE_PRIVATE);
+                prefEditor = sessionPref.edit();
+
+                Map<String, List<String>> headerFields = conn.getHeaderFields();
+                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+                if (cookiesHeader != null) {
+                    for (String cookie : cookiesHeader) {
+                        String sessionid = HttpCookie.parse(cookie).toString();
+                        Log.e("session id string:",sessionid);
+                        prefEditor.putString(SESSION_PREF_SESSIONID, sessionid);
+                        prefEditor.commit();
+                        Log.e("attempt2fix:",HttpCookie.parse(cookie).toString());
+                    }
+                }
+
 //                if (cookiesHeader != null) {
 //                    for (String cookie : cookiesHeader) {
 //                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
 //                    }
 //                }
 //                Log.e("Cookies - ",msCookieManager.getCookieStore().getCookies().toString());
-                Log.e("Custom Cookies After - ",cmrCookieMan.getCookieStore().getCookies().toString());
+//                Log.e("Custom Cookies After - ",cmrCookieMan.getCookieStore().getCookies().toString());
 //                Toast.makeText(getApplicationContext(), msCookieManager.getCookieStore().getCookies().toString(),
 //                        Toast.LENGTH_LONG).show();
 
