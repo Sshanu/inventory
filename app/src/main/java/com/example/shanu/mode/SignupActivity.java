@@ -1,6 +1,7 @@
 package com.example.shanu.mode;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,10 +22,13 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -46,6 +50,12 @@ public class SignupActivity extends AppCompatActivity {
     private String email;
     private String shopName;
     private String shopAddress;
+
+    public SharedPreferences sessionPref;
+    public SharedPreferences.Editor prefEditor;
+    public final String SESSION_PREF_NAME = "MyCookieStore";
+    public final String SESSION_PREF_SESSIONID = "session";
+    public String COOKIES_HEADER = "Set-Cookie";
 
     SessionManager session;
 
@@ -111,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
 
             try {
 
-                URL url = new URL(" https://7a10d223.ngrok.io/signup"); // here is our URL path
+                URL url = new URL(" https://3bbee033.ngrok.io/signup"); // here is our URL path
 
                 JSONObject postDataParams = new JSONObject();
 
@@ -148,6 +158,20 @@ public class SignupActivity extends AppCompatActivity {
                 os.close();
 
                 int responseCode=conn.getResponseCode();
+
+                Map<String, List<String>> headerFields = conn.getHeaderFields();
+                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+                if (cookiesHeader != null) {
+                    for (String cookie : cookiesHeader) {
+                        String sessionid = HttpCookie.parse(cookie).get(0).toString();
+                        Log.e("Signup session id:",sessionid);
+                        prefEditor.putString(SESSION_PREF_SESSIONID, sessionid);
+                        prefEditor.commit();
+                        Log.e("Signup attemp2fix:",HttpCookie.parse(cookie).toString());
+                    }
+                }
+
+
 
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
 

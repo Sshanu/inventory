@@ -47,9 +47,10 @@
         <activity android:name=".ListActivity" />
         <activity android:name=".SelectImageActivity" />
         <activity android:name=".NavigationActivity" />
-        <activity android:name=".TestActivity"/>
-        <activity android:name=".SignupActivity"/>
-        <activity android:name=".BillingActivity"></activity>
+        <activity android:name=".TestActivity" />
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".BillingActivity" />
+        <activity android:name=".data.TrainActivity"></activity>
     </application>
 
 </manifest>

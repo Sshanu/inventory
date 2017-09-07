@@ -3,11 +3,13 @@ package com.example.shanu.mode;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Base64;
 
 import android.view.View;
@@ -33,6 +35,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -65,6 +70,14 @@ public class TestActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private String encodedImage;
     private Button mTestButton;
+    private CookieManager cmrCookieMan;
+
+    public SharedPreferences sessionPref;
+    public SharedPreferences.Editor prefEditor;
+    public final String SESSION_PREF_NAME = "MyCookieStore";
+    public final String SESSION_PREF_SESSIONID = "session";
+    public String COOKIES_HEADER = "Set-Cookie";
+    public String SESSION_ID ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +87,8 @@ public class TestActivity extends AppCompatActivity {
 
         mTestButton = (Button) findViewById(R.id.testButton);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+//        cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
 
         mProgressBar.setVisibility(View.GONE);
         mTestButton.setOnClickListener(new View.OnClickListener() {
@@ -109,11 +124,6 @@ public class TestActivity extends AppCompatActivity {
                         Log.d("DescribeActivity", "Image: " + mImageUri + " resized to " + mBitmap.getWidth()
                                 + "x" + mBitmap.getHeight());
 
-//                        String path = Environment.getExternalStorageDirectory().toString();
-//                        OutputStream fOut = null;
-//                        File file = new File(path, "IMAGE_TEST"+".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
-//                        fOut = new FileOutputStream(file);
-//
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         byte[] imageBytes = baos.toByteArray();
@@ -159,6 +169,22 @@ public class TestActivity extends AppCompatActivity {
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
 
+                sessionPref = getSharedPreferences(SESSION_PREF_NAME, MODE_PRIVATE);
+                SESSION_ID = sessionPref.getString(SESSION_PREF_SESSIONID, null);
+                Log.e("SessPref's sessionid",SESSION_ID);
+                conn.setRequestProperty("Cookie", HttpCookie.parse(SESSION_ID).toString());
+
+//              Log.e("After setting -",conn.getHeaderField("session"));
+//              Log.e("before http conn ",conn.getHeaderField("Set-Cookie").toString());
+
+//              private SharedPreferences spe;
+//              SharedPreferences prefs = getSharedPreferences("MyCookieStore",MODE_PRIVATE);
+//              String prefStoredCookie = prefs.getString("session_cookie",null);
+
+//              SharedPreferences.Editor editor = getSharedPreferences("MyCookieStore2",MODE_PRIVATE).edit();*/
+
+//              conn.setRequestProperty("Set-Cookie",);
+
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -170,17 +196,24 @@ public class TestActivity extends AppCompatActivity {
 
                 int responseCode=conn.getResponseCode();
 
-                java.net.CookieManager msCookieManager = new java.net.CookieManager();
+//                java.net.CookieManager msCookieManager = new java.net.CookieManager();
+//
+//                Log.e("Response returned - ", String.valueOf(responseCode));
+//                Map<String, List<String>> headerFields = conn.getHeaderFields();
+//                List<String> cookiesHeader = headerFields.get("Set-Cookie");
+////                if(cookiesHeader!=null ) {
+//                    Log.e("Cookies returned - ", headerFields.toString());
+////                }
+//
+//                if (cookiesHeader != null) {
+//                    for (String cookie : cookiesHeader) {
+//                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
+//                    }
+//                }
 
-                Map<String, List<String>> headerFields = conn.getHeaderFields();
-                List<String> cookiesHeader = headerFields.get("Set-Cookie");
 
-                if (cookiesHeader != null) {
-                    for (String cookie : cookiesHeader) {
-                        msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-                    }
-                }
-                Log.e("Cookies in TestAct - ",msCookieManager.getCookieStore().getCookies().toString());
+//                CookieHandler.setDefault(cmrCookieMan);
+//                Log.e("Cookies in custom - ",cmrCookieMan.getCookieStore().getCookies().toString());
 
 
 

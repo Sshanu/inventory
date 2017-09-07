@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.shanu.mode.data.TrainActivity;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     protected DrawerLayout drawer;
@@ -27,12 +29,12 @@ public class NavigationActivity extends AppCompatActivity
 
         session.checkLogin();
 
-        TrainFragment fragment = new TrainFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-
-        fragmentTransaction.commit();
+//        TrainFragment fragment = new TrainFragment();
+//        android.support.v4.app.FragmentTransaction fragmentTransaction =
+//                getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, fragment);
+//
+//        fragmentTransaction.commit();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -94,7 +96,7 @@ public class NavigationActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_train) {
+        if (id == R.id.nav_add) {
 
             Intent intent = new Intent(NavigationActivity.this, DetailsActivity.class);
             startActivity(intent);
@@ -109,7 +111,9 @@ public class NavigationActivity extends AppCompatActivity
             Intent intent = new Intent(NavigationActivity.this, ListActivity.class);
             startActivity(intent);
 
-        }  else if (id == R.id.nav_manage) {
+        }  else if (id == R.id.nav_train) {
+            Intent intent = new Intent(NavigationActivity.this, TrainActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
