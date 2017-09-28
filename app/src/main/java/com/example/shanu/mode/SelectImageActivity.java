@@ -2,10 +2,13 @@ package com.example.shanu.mode;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 // The activity for the user to select a image and to detect faces in the image.
 public class SelectImageActivity extends AppCompatActivity {
@@ -62,6 +66,7 @@ public class SelectImageActivity extends AppCompatActivity {
                         imageUri = data.getData();
                     }
                     Intent intent = new Intent();
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setData(imageUri);
                     setResult(RESULT_OK, intent);
                     finish();
@@ -75,13 +80,25 @@ public class SelectImageActivity extends AppCompatActivity {
     // When the button of "Take a Photo with Camera" is pressed.
     public void takePhoto(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(Build.VERSION.SDK_INT>=24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
         if(intent.resolveActivity(getPackageManager()) != null) {
             // Save the photo taken to a temporary file.
             File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             try {
                 File file = File.createTempFile("IMG_", ".jpg", storageDir);
                 mUriPhotoTaken = Uri.fromFile(file);
+                //mUriPhotoTaken = FileProvider.getUriForFile(this, getApplicationContext() + "com.example.shanu.mode.fileprovider", file);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mUriPhotoTaken);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(intent, REQUEST_TAKE_PHOTO);
             } catch (IOException e) {
                 setInfo(e.getMessage());

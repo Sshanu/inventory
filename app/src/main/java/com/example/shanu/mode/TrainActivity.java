@@ -1,4 +1,4 @@
-package com.example.shanu.mode.data;
+package com.example.shanu.mode;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,16 +72,16 @@ public class TrainActivity extends AppCompatActivity {
                 URL url = new URL("http://3bbee033.ngrok.io/train"); // here is your URL path
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                /*conn.setReadTimeout(15000 *//* milliseconds *//*);
-                conn.setConnectTimeout(15000 *//* milliseconds *//*);
-                conn.setRequestMethod("GET");
+                conn.setReadTimeout(15000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-*/
+
                 sessionPref = getSharedPreferences(SESSION_PREF_NAME, MODE_PRIVATE);
                 SESSION_ID = sessionPref.getString(SESSION_PREF_SESSIONID, null);
                 Log.e("SessPref's sessionid",SESSION_ID);
-                conn.setRequestProperty("Cookie", HttpCookie.parse(SESSION_ID).toString());
+                conn.setRequestProperty("Cookie", SESSION_ID);
 
                 conn.connect();
 //

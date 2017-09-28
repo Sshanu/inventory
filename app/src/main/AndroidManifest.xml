@@ -8,6 +8,7 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -23,6 +24,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name=".GenericFileProvider"
+                android:authorities="com.example.shanu.mode.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
         <activity
             android:name=".LoginActivity"
             android:label="Inventory Manager"
@@ -50,7 +62,7 @@
         <activity android:name=".TestActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".BillingActivity" />
-        <activity android:name=".data.TrainActivity"></activity>
+        <activity android:name=".TrainActivity"></activity>
     </application>
 
 </manifest>

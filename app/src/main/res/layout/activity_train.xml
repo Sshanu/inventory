@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.shanu.mode.data.TrainActivity">
+    tools:context="com.example.shanu.mode.TrainActivity">
 
 
     <TextView
@@ -15,7 +15,7 @@
         android:text="Do you want to train your model ?"
         android:paddingTop="20dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/button" />
+        android:layout_alignStart="@+id/train_button" />
 
     <Button
         android:id="@+id/train_button"
