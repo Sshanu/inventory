@@ -1,9 +1,12 @@
 package com.example.shanu.mode;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -90,12 +93,20 @@ public class TestActivity extends AppCompatActivity {
 
 //        cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] {Manifest.permission.CAMERA}, 1);
+            }
+        }
+
         mProgressBar.setVisibility(View.GONE);
         mTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
+
                 intent = new Intent(TestActivity.this, SelectImageActivity.class);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(intent, REQUEST_SELECT_IMAGE);
             }
         });
@@ -172,9 +183,10 @@ public class TestActivity extends AppCompatActivity {
                 sessionPref = getSharedPreferences(SESSION_PREF_NAME, MODE_PRIVATE);
                 SESSION_ID = sessionPref.getString(SESSION_PREF_SESSIONID, null);
                 Log.e("SessPref's sessionid",SESSION_ID);
-                conn.setRequestProperty("Cookie", HttpCookie.parse(SESSION_ID).toString());
+                Log.e("SessPref's sessionid2",HttpCookie.parse(SESSION_ID).toString());
+                conn.setRequestProperty("Cookie",SESSION_ID);
 
-//              Log.e("After setting -",conn.getHeaderField("session"));
+                //Log.e("After setting -",conn.getHeaderField("session"));
 //              Log.e("before http conn ",conn.getHeaderField("Set-Cookie").toString());
 
 //              private SharedPreferences spe;

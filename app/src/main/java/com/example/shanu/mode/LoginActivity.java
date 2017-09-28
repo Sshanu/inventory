@@ -159,11 +159,13 @@ public class LoginActivity extends AppCompatActivity {
                 List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
                 if (cookiesHeader != null) {
                     for (String cookie : cookiesHeader) {
-                        String sessionid = HttpCookie.parse(cookie).toString();
-                        Log.e("session id string:",sessionid);
-                        prefEditor.putString(SESSION_PREF_SESSIONID, sessionid);
+                        String normieSessionId = cookie;
+                        Log.e("session id 1:",normieSessionId);
+//                        String sessionid = HttpCookie.parse(cookie).toString();
+//                        Log.e("session id 2 string:",sessionid);
+                        prefEditor.putString(SESSION_PREF_SESSIONID, normieSessionId);
                         prefEditor.commit();
-                        Log.e("attempt2fix:",HttpCookie.parse(cookie).toString());
+//                        Log.e("attempt2fix:",HttpCookie.parse(cookie).toString());
                     }
                 }
 
