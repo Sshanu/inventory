@@ -26,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import android.widget.ToggleButton;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -38,14 +39,17 @@ public class TrainActivity extends AppCompatActivity {
     public final String SESSION_PREF_SESSIONID = "session";
     public String COOKIES_HEADER = "Set-Cookie";
     public String SESSION_ID ;
-
+    public ToggleButton toggle;
     public Button trainButton;
+    private static Bundle bundle = new Bundle();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train);
 
         trainButton = (Button) findViewById(R.id.train_button);
+        toggle = (ToggleButton) findViewById(R.id.toggleButton);
 
         trainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,11 +58,23 @@ public class TrainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        bundle.putBoolean("ToggleButtonState", toggle.isChecked());
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        toggle.setChecked(bundle.getBoolean("ToggleButtonState",false));
     }
     public class SendPostRequest extends AsyncTask<String, Void, String> {
 
         protected void onPreExecute(){
+
+            toggle.setChecked(true);
 
             Toast.makeText(getApplicationContext(), "You'll be notified once the training is done.",
                     Toast.LENGTH_LONG).show();
@@ -69,7 +85,7 @@ public class TrainActivity extends AppCompatActivity {
 
             try {
 
-                URL url = new URL("http://3bbee033.ngrok.io/train"); // here is your URL path
+                URL url = new URL("http://b112da2f.ngrok.io/train"); // here is your URL path
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000 /* milliseconds */);
@@ -126,10 +142,12 @@ public class TrainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            toggle.setChecked(false);
 
             Log.e("response is :",result.toString());
             try {
                 JSONObject jResult = new JSONObject(result);
+
                 String flag = jResult.getString("status");
                 if (flag.equalsIgnoreCase("Success"))
                 {

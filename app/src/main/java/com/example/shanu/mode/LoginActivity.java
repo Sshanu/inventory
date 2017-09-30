@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                URL url = new URL(" http://3bbee033.ngrok.io/signin"); // here is your URL path
+                URL url = new URL("http://b112da2f.ngrok.io/signin"); // here is your URL path
 
                 JSONObject postDataParams = new JSONObject();
                 postDataParams.put("inputPhone", phone);

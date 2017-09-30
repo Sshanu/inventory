@@ -121,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
 
             try {
 
-                URL url = new URL(" https://3bbee033.ngrok.io/signup"); // here is our URL path
+                URL url = new URL("http://b112da2f.ngrok.io/signup"); // here is our URL path
 
                 JSONObject postDataParams = new JSONObject();
 
